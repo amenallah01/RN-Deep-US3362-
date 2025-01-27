@@ -27,7 +27,7 @@ The following lab files are included, covering various deep learning concepts an
 
 5. **LAB_5_KRISSAAN.Rmd**  
    - **Title**: TP 5 - Generative Models and Autoencoders  
-   - **Description**: Building generative models, including autoencoders, VAEs, and GANs, to understand representation learning.
+   - **Description**: Building generative models, including autoencoder sand  VAEs, to understand representation learning.
 
 ---
 
