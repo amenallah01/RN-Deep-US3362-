@@ -1,0 +1,102 @@
+---
+title: "TP 2 - Deep Learning avec Keras et Manifold Untangling"
+author: |
+  **KRISSAAN AMEN ALLAH - M2 - TRIED**  
+  amenallahkrissane10@gmail.com  
+  amen-allah.krissaan@telecom-sudparis.eu
+output: html_document
+---
+
+# Introduction
+
+L'objectif de ce TP est d'explorer la bibliothèque **Keras** pour entraîner des réseaux de neurones profonds et d'analyser leurs représentations internes. Nous examinerons également leur capacité à résoudre le problème de la séparation des données dans l'espace des représentations (**manifold untangling**).
+
+---
+
+# Exercice 1 : Régression Logistique avec Keras
+
+### Objectif
+Mettre en œuvre un modèle de **régression logistique** pour la classification multi-classes.
+
+### Étapes
+- Création d'une couche dense avec activation `softmax`.
+- Compilation avec l'entropie croisée comme fonction de coût.
+- Entraînement et évaluation sur la base **MNIST**.
+
+### Résultats
+- **Nombre de paramètres** : 7,850  
+- **Précision sur la base de test** : **92%**
+
+---
+
+# Exercice 2 : Perceptron avec Keras
+
+### Objectif
+Ajouter une couche cachée avec activation `sigmoïde` pour construire un **Perceptron Multi-Couches (MLP)**.
+
+### Étapes
+- Ajout d'une couche cachée de 100 neurones suivie d'une sortie avec `softmax`.
+- Entraînement sur la base MNIST.
+- Évaluation des performances.
+
+### Résultats
+- **Nombre de paramètres** : 79,510  
+- **Précision sur la base de test** : **98%**
+
+### Analyse
+L'ajout de couches cachées permet de mieux capturer les relations non linéaires, ce qui améliore les performances par rapport à la régression logistique.
+
+---
+
+# Exercice 3 : Réseaux Convolutifs avec Keras
+
+### Objectif
+Construire un **Réseau Convolutif Profond (ConvNet)** inspiré de l'architecture LeNet-5.
+
+### Architecture
+1. Couche convolutionnelle avec 16 filtres (5x5) suivie de ReLU et MaxPooling.
+2. Couche convolutionnelle avec 32 filtres (5x5) suivie de ReLU et MaxPooling.
+3. Couche dense (100 neurones) suivie de sigmoïde, puis une sortie `softmax`.
+
+### Résultats
+- **Précision sur la base de test** : **99%**
+- Les réseaux convolutifs surpassent les perceptrons grâce à leur capacité à capturer les caractéristiques locales des images.
+
+---
+
+# Exercice 4 : Visualisation avec t-SNE
+
+### Objectif
+Réduire la dimension des données MNIST en 2D avec **t-SNE** et analyser la distribution des classes.
+
+### Analyse
+- **t-SNE** : Bonne séparation des classes, capturant les structures non linéaires des données.
+- **Comparaison avec PCA** : La PCA est moins performante pour séparer les classes, car elle est limitée aux relations linéaires.
+
+### Résultat
+Les représentations projetées par t-SNE montrent des regroupements nets, révélant une structure significative dans les données MNIST.
+
+---
+
+# Exercice 5 : Visualisation des représentations internes
+
+### Objectif
+Analyser les **représentations internes** apprises par les réseaux de neurones avec t-SNE.
+
+### Méthodologie
+- Extraction des représentations internes des couches cachées des modèles.
+- Application de t-SNE sur ces représentations pour visualiser leur organisation dans l'espace 2D.
+
+### Résultats
+- Les représentations internes des **ConvNets** montrent une meilleure séparation des classes par rapport aux perceptrons.
+- Cela confirme que les réseaux de neurones profonds apprennent des transformations des données qui facilitent la classification.
+
+---
+
+# Conclusion
+
+- Les réseaux de neurones profonds, en particulier les ConvNets, transforment efficacement les données en représentations internes séparables, facilitant ainsi la classification.
+- Les méthodes de visualisation, comme **t-SNE**, permettent d'explorer ces représentations et de mieux comprendre leur structure.
+- Ce travail démontre la capacité des réseaux à résoudre le problème de la séparation des données dans des espaces complexes (**manifold untangling**).
+
+---

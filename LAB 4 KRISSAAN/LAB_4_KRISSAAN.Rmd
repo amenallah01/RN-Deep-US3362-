@@ -1,0 +1,152 @@
+---
+title: "TP 4 - Auto-encodeurs variationnels et PixelCNN"
+author: |
+  **KRISSAAN AMEN ALLAH - M2 - TRIED**  
+  amenallahkrissane10@gmail.com  
+  amen-allah.krissaan@telecom-sudparis.eu
+output: html_document
+---
+
+# TP 4.1 - Auto-encodeurs variationnels
+
+## Introduction
+
+L’objectif de cette séance est d’illustrer la construction d’un espace latent à l’aide d’un auto-encodeur classique, puis un auto-encodeur variationnel (VAE). Ensuite, nous utiliserons le VAE pour générer des données synthétiques réalistes en fonction des données d’apprentissage.
+
+Les expériences sont réalisées sur le jeu de données **Fashion-MNIST**. Si vous disposez d’un GPU, vous pouvez accélérer les calculs en activant l’option correspondante.
+
+---
+
+## Préambule
+
+Nous commençons par charger le jeu de données **Fashion-MNIST** et visualiser quelques exemples. Ce jeu de données contient des images en niveaux de gris de taille 28x28 pixels.
+
+---
+
+## Auto-encodeur
+
+### Implémentation
+
+Un **auto-encodeur convolutif** est implémenté avec les caractéristiques suivantes :
+
+- **Encodeur** :
+  - 2 couches de convolution (activation ReLU) suivies d’une couche linéaire pour réduire la dimensionnalité.
+- **Décodeur** :
+  - 1 couche linéaire suivie de 2 couches de convolution transposée pour reconstruire les images.
+  
+Les filtres convolutifs utilisés sont de taille 4x4 pour limiter les artefacts.
+
+### Entraînement
+
+L’auto-encodeur est entraîné en minimisant l’erreur quadratique moyenne entre les images originales et les reconstructions. Une boucle d’entraînement est mise en place pour optimiser les paramètres du modèle.
+
+### Visualisation des reconstructions
+
+Après l’entraînement, les reconstructions des images sont visualisées pour évaluer qualitativement les performances du modèle.
+
+---
+
+## Débruitage
+
+Les auto-encodeurs peuvent reconstruire des images bruitées en apprenant des filtres robustes au bruit. Les résultats montrent que l’auto-encodeur est capable de réduire significativement le bruit et de restaurer les caractéristiques principales des images.
+
+**Observation** :
+- Les reconstructions des images bruitées sont plus approximatives que celles des images originales.
+- Le modèle démontre une capacité intéressante de **débruitage**, même en présence de perturbations significatives.
+
+---
+
+## Auto-encodeurs variationnels (VAE)
+
+### Implémentation
+
+Un **auto-encodeur variationnel (VAE)** est construit, où l’encodeur produit deux vecteurs :
+- La moyenne (\( \mu \)).
+- La variance logarithmique (\( \log \sigma^2 \)).
+
+L’échantillonnage dans l’espace latent est réalisé à l’aide de la **reparamétrisation**.
+
+### Fonction de coût
+
+La fonction de coût combine deux termes :
+1. **Erreur de reconstruction** (entropie croisée binaire).
+2. **Divergence de Kullback-Leibler** pour rapprocher la distribution latente d’une loi normale centrée réduite.
+
+### Visualisation et génération
+
+- Les reconstructions montrent une qualité similaire à celles obtenues avec l’auto-encodeur classique.
+- En échantillonnant des vecteurs dans l’espace latent, le modèle génère de nouvelles images réalistes.
+
+---
+
+## Interpolation dans l’espace latent
+
+L’interpolation entre deux vecteurs latents génère des transitions fluides entre deux images. Cela met en évidence la continuité de l’espace latent appris par le VAE.
+
+---
+
+## Visualisation de l’espace latent
+
+Une réduction de dimension non linéaire (t-SNE) est utilisée pour projeter les codes latents des images de test sur un plan. Les résultats montrent une séparation cohérente des classes.
+
+---
+
+# TP 4.2 - VAE conditionnel et PixelCNN
+
+## Introduction
+
+Dans cette section, nous explorons deux modèles génératifs :
+1. **VAE conditionnel** : Génération contrôlée d’images.
+2. **PixelCNN** : Modèle autorégressif pour la génération d’images pixel par pixel.
+
+---
+
+## VAE conditionnel
+
+### Implémentation
+
+Le VAE est étendu pour inclure un **conditionnement** sur les étiquettes des images. Le vecteur de conditionnement est concaténé aux caractéristiques lors du passage dans l’encodeur et le décodeur.
+
+### Résultats
+
+Le modèle est capable de générer des images conditionnées par une étiquette donnée. Par exemple, pour MNIST, le modèle génère des chiffres spécifiques (0 à 9) en fonction du vecteur de conditionnement fourni.
+
+---
+
+## PixelCNN
+
+### Implémentation
+
+Un modèle **PixelCNN** est construit en utilisant des convolutions masquées pour garantir que chaque pixel est prédit en fonction des pixels précédents.
+
+### Génération d’images
+
+PixelCNN génère des images pixel par pixel en suivant un ordre séquentiel. Les résultats montrent que le modèle capture efficacement les dépendances locales entre pixels.
+
+### Limites
+
+La génération d’images est lente en raison de la nature séquentielle du modèle. Cependant, les images produites sont cohérentes et fidèles aux données d’apprentissage.
+
+---
+
+## Synthèse des apprentissages
+
+- **Auto-encodeurs variationnels (VAE)** :
+  - Génération d’images fluides et cohérentes.
+  - Application à la compression, au débruitage et à la génération conditionnelle.
+  
+- **PixelCNN** :
+  - Excellente modélisation des dépendances locales.
+  - Adapté à des tâches nécessitant une modélisation fine des distributions de pixels.
+
+---
+
+## Conclusion
+
+Ce TP illustre l’efficacité des modèles génératifs pour la reconstruction, la génération, et le conditionnement d’images. Ces techniques sont applicables à divers domaines, tels que la vision par ordinateur, la synthèse d’images, et l’apprentissage non supervisé.
+
+---
+
+**KRISSAAN AMEN ALLAH - M2 - TRIED**  
+**amenallahkrissane10@gmail.com**  
+**amen-allah.krissaan@telecom-sudparis.eu**  

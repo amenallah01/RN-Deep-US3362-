@@ -1,0 +1,104 @@
+---
+title: "TP 1 - Algorithme de rétro-propagation de l’erreur"
+author: |
+  **KRISSAAN AMEN ALLAH - M2 - TRIED**  
+  amenallahkrissane10@gmail.com  
+  amen-allah.krissaan@telecom-sudparis.eu
+output: html_document
+---
+
+
+# Introduction
+
+L'objectif de ce TP est d'implémenter l'apprentissage de réseaux de neurones simples et de mieux comprendre leur fonctionnement. Nous travaillons avec la base de données **MNIST** (images de chiffres manuscrits).
+
+---
+
+# Exercice 0 : Visualisation des données
+
+- Nous avons affiché les 200 premières images de la base d'apprentissage.
+- **Taille de l'espace des images** : Chaque image est de dimension \( 28 \times 28 \), soit 784 pixels.
+
+---
+
+# Exercice 1 : Régression Logistique
+
+## Modèle de prédiction
+
+- La régression logistique correspond à un réseau de neurones à une seule couche, projetant les vecteurs d'entrée (\(784\)) sur 10 sorties correspondant aux classes (chiffres 0-9).
+- La sortie est obtenue via une activation **softmax**, permettant de calculer les probabilités a posteriori pour chaque classe.
+
+**Nombre de paramètres** : \( (784+1) \times 10 = 7850 \)
+
+## Fonction de coût
+
+- Fonction d'erreur : **Entropie croisée**, mesurant la dissimilarité entre les sorties prédites (\( \hat{y} \)) et les labels réels (\( y^* \)).
+- Optimisation via descente de gradient avec mise à jour des paramètres.
+
+## Résultats et observations
+
+- **Précision obtenue** : ~92% sur la base de test.
+- La fonction de coût est convexe pour la régression logistique, garantissant une convergence vers un minimum global avec un pas de gradient bien choisi.
+
+---
+
+# Exercice 2 : Perceptron Multi-Couches (MLP)
+
+## Modèle
+
+- Le perceptron multi-couches (MLP) permet d'apprendre des frontières de décision non linéaires.
+- Architecture :
+  - Couche cachée : Projection linéaire suivie d'une activation **sigmoïde** (\( 784 \to 100 \)).
+  - Couche de sortie : Projection vers les 10 classes suivie d'une activation **softmax** (\( 100 \to 10 \)).
+
+## Optimisation avec rétro-propagation de l'erreur
+
+- Gradients calculés pour toutes les couches.
+- Les poids sont mis à jour via descente de gradient avec un taux d'apprentissage (\( \eta = 0.1 \)).
+
+## Résultats avec différentes initialisations
+
+### Initialisation des poids à zéro
+
+- **Précision obtenue** : Faible (~70%).
+- **Conclusion** : L'initialisation à zéro induit une symétrie des gradients, empêchant les neurones d'apprendre des représentations distinctes.
+
+### Initialisation avec une loi normale (\( \sigma = 0.1 \))
+
+- **Précision obtenue** : ~95%.
+- **Conclusion** : L'initialisation aléatoire introduit de la variabilité, permettant aux neurones d'apprendre des caractéristiques différentes.
+
+### Initialisation Xavier (Glorot)
+
+- **Précision obtenue** : ~98%.
+- **Conclusion** : L'initialisation de Xavier maintient la variance des activations stable à travers les couches, favorisant une convergence rapide et stable.
+
+---
+
+# Observations et conclusions
+
+### Graphique 1 : Loss d'entraînement et de test
+
+- Les pertes diminuent rapidement au début, puis se stabilisent.
+- Les courbes d'entraînement et de test restent proches, indiquant une bonne généralisation.
+
+### Graphique 2 : Précision
+
+- La précision augmente rapidement, atteignant un plateau à environ 98%.
+- La méthode d'initialisation Xavier offre les meilleurs résultats en maintenant une variance optimale pour les activations et les gradients.
+
+### Importance des initialisations
+
+1. **À zéro** : Inefficace en raison de la symétrie des gradients.
+2. **Aléatoire (normale)** : Améliore l'apprentissage mais peut être instable.
+3. **Xavier** : Équilibre idéal pour stabiliser l'apprentissage tout en favorisant la généralisation.
+
+---
+
+# Conclusion générale
+
+- Les résultats démontrent l'importance de l'initialisation des poids dans l'apprentissage des réseaux de neurones.
+- Une bonne initialisation, comme celle de Xavier, permet d'atteindre des performances élevées (~98%) tout en évitant les problèmes de sur-apprentissage.
+- Le perceptron multi-couches est un modèle puissant pour capturer des relations non linéaires, mais son succès repose sur une optimisation rigoureuse et une initialisation adaptée.
+
+---

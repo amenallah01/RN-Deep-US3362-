@@ -1,0 +1,99 @@
+---
+title: "TP 5 - Modèles autoregressifs et Vision-Langage"
+author: |
+  **KRISSAAN AMEN ALLAH - M2 - TRIED**  
+  amenallahkrissane10@gmail.com  
+  amen-allah.krissaan@telecom-sudparis.eu
+
+---
+
+# TP 5.1 - Modèles autoregressifs
+
+**L’objectif de ce TP est d’utiliser des réseaux de neurones pour l'apprentissage de modèles autoregressifs.**
+
+## Exercice 1 : Génération de poésie
+
+Une première application va consister à apprendre à générer du texte. Nous allons partir d’une base de données d’un recueil de poésies, « Les Fleurs du Mal » de Charles Baudelaire.  
+On pourra récupérer le fichier d’entrée à l’adresse suivante : [http://cedric.cnam.fr/~thomen/cours/US330X/fleurs_mal.txt](http://cedric.cnam.fr/~thomen/cours/US330X/fleurs_mal.txt).
+
+### **a) Génération des données et étiquettes**
+
+Nous allons parser le fichier d’entrée pour récupérer le texte et effectuer quelques pré-traitements simples.
+
+### Question :
+- **Que représente la variable `chars` ?**  
+  La variable `chars` est une liste triée des caractères uniques présents dans le texte. Elle représente le dictionnaire de symboles utilisés dans le texte.  
+- **Que représente `nb_chars` ?**  
+  `nb_chars` est le nombre de caractères uniques dans ce dictionnaire. Il représente la taille du vocabulaire utilisé pour encoder les caractères en one-hot.
+
+### **b) Apprentissage d’un modèle auto-supervisé pour la génération de texte**
+
+L’objectif est d'entraîner un réseau de neurones récurrent pour prédire le prochain caractère dans une séquence donnée.
+
+### Question :
+- **`return_sequences=False`** :  
+  Le RNN ne retourne que la sortie finale de la séquence (dernier pas de temps).  
+- **`unroll=True`** :  
+  Accélère les calculs en déroulant la boucle récurrente, utile pour des séquences courtes.
+
+### Analyse de l’apprentissage
+
+- **Taux de classification obtenu :**
+  - **Entraînement :** 53.57%  
+  - **Test :** 45.94%  
+
+- **Commentaire :**  
+  Les performances faibles peuvent s'expliquer par la difficulté de prédire des caractères séquentiels. L'ajustement des paramètres ou l'utilisation de modèles plus avancés comme LSTM/GRU pourrait améliorer les résultats.
+
+---
+
+## Exercice 2 : Embedding Vectoriel de texte
+
+Nous explorons l’embedding vectoriel de texte Glove pour décrire chaque mot d’un corpus dans le cadre de légendage d’images.
+
+### **a) Extraction des embedding Glove des légendes**
+
+- Nous utilisons les légendes associées aux images pour extraire les mots présents et leurs embeddings correspondants.  
+- La matrice des embeddings a une taille \((\text{nombre de mots uniques} + 2) \times (\text{taille de l'embedding})\).  
+- Les mots `<start>` et `<end>` sont ajoutés pour marquer le début et la fin des séquences.
+
+### **b) Analyse des embedding Glove des légendes**
+
+- **Normalisation des embeddings :**  
+  Facilite les calculs de similarité entre les vecteurs.  
+
+- **Clustering des mots :**  
+  Les mots sont regroupés en 10 clusters avec l'algorithme KMeans, permettant d’analyser les regroupements sémantiques des mots.
+
+---
+
+# TP 5.2 - Vision et Langage
+
+Dans ce TP, nous abordons le problème du légendage d’images (« image captioning »). L’objectif est de décrire le contenu visuel d’une image en générant une phrase en langage naturel.
+
+## Exercice 1 : Simplification du vocabulaire
+
+Pour accélérer l’entraînement, nous réduisons le vocabulaire à 1000 mots les plus fréquents dans les légendes.  
+Un histogramme des fréquences est utilisé pour sélectionner les mots les plus représentatifs.
+
+## Exercice 2 : Création des données d’apprentissage et de test
+
+Les données sont constituées des caractéristiques des images et des séquences de mots (légendes) encodées avec les embeddings Glove.
+
+## Exercice 3 : Entraînement du modèle
+
+Un réseau récurrent est utilisé pour prédire les mots suivants d’une légende à partir d'une image et des mots précédents.  
+### **Analyse des résultats :**
+- Ajustement du vocabulaire et des paramètres du modèle pour obtenir des résultats optimaux.
+
+## Exercice 4 : Évaluation du modèle
+
+Le modèle est évalué qualitativement et quantitativement :  
+- Les légendes générées sont comparées aux annotations d'origine.  
+- Les scores BLEU-1 à BLEU-4 mesurent la similarité entre les légendes générées et les annotations.
+
+---
+
+### **Conclusion :**
+
+Ce TP permet d’explorer les défis du traitement de séquences avec des réseaux récurrents, ainsi que les interactions entre vision et langage pour le légendage d’images.

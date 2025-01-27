@@ -1,0 +1,125 @@
+---
+title: "TP 3 - Deep Learning Avancé: Comparaison, Transfert d’Apprentissage et Fine-Tuning"
+author: |
+  **KRISSAAN AMEN ALLAH - M2 - TRIED**  
+  amenallahkrissane10@gmail.com  
+  amen-allah.krissaan@telecom-sudparis.eu
+output: html_document
+---
+
+# **Introduction**
+
+Ce TP explore les concepts avancés du **Deep Learning** en se concentrant sur :
+1. **Comparaison des fonctions d'activation** (ReLU vs Sigmoïde).
+2. **Extraction de "Deep Features"** avec des modèles pré-entraînés comme ResNet-50.
+3. **Transfert d’apprentissage** pour des tâches spécifiques.
+4. **Fine-tuning** pour optimiser les performances sur des bases ciblées.
+
+---
+
+# **Exercice 0 : Comparaison ReLU et Sigmoïde**
+
+## Théorie
+
+- **ReLU** (Rectified Linear Unit) :
+  $$f(x) = \max(0, x)$$
+  Avantages :
+  - Évite le problème de *vanishing gradients*.
+  - Convergence rapide dans les réseaux profonds.
+
+- **Sigmoïde** :
+  $$f(x) = \frac{1}{1 + e^{-x}}$$
+  Inconvénients :
+  - Sensible au problème de *vanishing gradients*.
+  - Moins adaptée aux architectures profondes.
+
+### Conclusion
+
+L'utilisation de **ReLU** réduit le nombre d'époques nécessaires pour atteindre la convergence par rapport à la sigmoïde, ce qui en fait un choix privilégié pour les réseaux profonds.
+
+---
+
+# **Exercice 1 : Transfer Learning sur VOC 2007**
+
+## Données
+
+La base **PASCAL VOC2007** comprend :
+- **20 classes** : Person, Animal, Vehicle, Indoor (multi-label).
+- **5000 images** pour l'apprentissage et 5000 pour le test.
+- Images de tailles variables (~500x300 pixels).
+
+Pour surmonter le problème de sur-apprentissage avec des bases de taille modeste comme PASCAL VOC2007, nous utilisons le **transfert d’apprentissage**.
+
+---
+
+## Modèle ResNet-50 avec Keras
+
+Le modèle **ResNet-50** est utilisé pour extraire des caractéristiques profondes (**Deep Features**) des images.
+
+- **Pré-traitement** :  
+  Les poids du réseau sont initialisés à partir d’ImageNet. La dernière couche (1000 classes) est remplacée par une couche correspondant aux 20 classes de VOC2007.
+
+---
+
+# **Exercice 2 : Extraction de "Deep Features"**
+
+### Processus
+
+1. Suppression de la dernière couche du modèle.
+2. Utilisation de la sortie de la couche avant classification (taille 2048) comme "Deep Features".
+3. Génération des données d’entrée à l’aide du générateur **PascalVOCDataGenerator**.
+
+---
+
+# **Exercice 3 : Transfert d’apprentissage**
+
+### Modèle
+
+- Une seule couche de classification (activation sigmoïde) pour traiter les "Deep Features".
+- La **sigmoïde** est utilisée car le problème est **multi-label** (contrairement à **softmax** qui est multi-classes).
+
+### Résultats
+
+- **MAP (Mean Average Precision)** obtenu sur la base de test : **82.26%**
+- Le transfert d’apprentissage sans fine-tuning offre des performances solides grâce à l’utilisation de "Deep Features" extraites de ResNet-50.
+
+---
+
+# **Exercice 4 : Fine-tuning sur VOC 2007**
+
+### Méthodologie
+
+1. Tous les poids du réseau sont entraînés (fine-tuning complet).
+2. La descente de gradient est appliquée sur l’ensemble des couches pour spécialiser les représentations internes du modèle à PASCAL VOC2007.
+
+### Résultats
+
+- **MAP sur la base de test avec fine-tuning** : **84.71%**.
+- Amélioration par rapport au transfert simple (**+2.45%**).
+
+---
+
+# **Conclusion**
+
+### Comparaison des approches
+
+1. **Transfert d’apprentissage** :
+   - MAP : 82.26%
+   - Avantage : rapide, nécessite peu de calculs.
+   - Inconvénient : limite les performances sans spécialisation.
+
+2. **Fine-tuning** :
+   - MAP : 84.71%
+   - Avantage : performances supérieures grâce à l'adaptation des poids.
+   - Inconvénient : plus coûteux en temps et en calcul.
+
+### Recommandations
+
+- **Transfert d’apprentissage** : adapté pour des bases de données de taille modeste et un calcul rapide.
+- **Fine-tuning** : recommandé lorsque la performance est prioritaire et que des ressources GPU sont disponibles.
+
+---
+
+**KRISSAAN AMEN ALLAH - M2 - TRIED**  
+**amenallahkrissane10@gmail.com**  
+**amen-allah.krissaan@telecom-sudparis.eu**  
